@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&B - Maquillaje, Perfumes y Accesorios</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #faf6f7; margin: 0; padding: 20px; color: #4a4a4a; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    
+    /* ENCABEZADO BASADO EN EL BOCETO (Rosa pastel tranquilo y Blanco) */
+    header { 
+      background-color: #fce4e8; 
+      border: 2px solid #f2bac1;
+      padding: 30px 20px; 
+      border-radius: 16px; 
+      text-align: center; 
+      margin-bottom: 30px; 
+      box-shadow: 0 4px 12px rgba(242, 186, 193, 0.3);
+      position: relative;
+    }
+
+    /* Distribución estilo Banner del Dibujo */
+    .banner-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 600px;
+      margin: 0 auto 10px auto;
+    }
+
+    /* Iconos laterales (Flores a la izquierda, Corazones a la derecha) */
+    .icon-left, .icon-right {
+      font-size: 2.2rem;
+      opacity: 0.85;
+      user-select: none;
+    }
+
+    /* Marca Central D&B */
+    .brand-title {
+      font-size: 3.5rem;
+      font-weight: bold;
+      font-family: 'Georgia', serif;
+      color: #c96b85;
+      margin: 0;
+      letter-spacing: 4px;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .banner-divider {
+      border: 0;
+      border-top: 1px solid #ebaabe;
+      width: 70%;
+      margin: 10px auto 12px auto;
+    }
+
+    header p { color: #8b5a6c; margin: 0; font-weight: 500; font-size: 1.1rem; letter-spacing: 0.5px; }
+
+    /* Layout Principal */
+    .main-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+    @media (max-width: 850px) { .main-layout { grid-template-columns: 1fr; } }
+
+    /* Categorías */
+    .categorias-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
+    .btn-cat { padding: 8px 18px; border: 1px solid #f2bac1; background: white; color: #c96b85; border-radius: 20px; cursor: pointer; transition: 0.2s; font-weight: 600; }
+    .btn-cat:hover, .btn-cat.active { background: #f2bac1; color: white; }
+
+    /* Catálogo de Productos */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+    .card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(242, 186, 193, 0.15); overflow: hidden; display: flex; flex-direction: column; border-top: 4px solid #f2bac1; position: relative; }
+    .card-img { width: 100%; height: 160px; object-fit: cover; background-color: #fff0f3; }
+    .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+    .card h3 { margin: 0 0 8px 0; font-size: 1rem; color: #5a3e49; }
+    .card .tag { font-size: 0.75rem; background: #fde8eb; padding: 3px 8px; border-radius: 4px; color: #c96b85; align-self: flex-start; font-weight: 600; }
+    .card .precio { font-size: 1.1rem; font-weight: bold; color: #28a745; margin: 8px 0; }
+    .btn-delete { background: #e63946; color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-size: 0.8rem; }
+
+    /* Carrito */
+    .carrito-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(242, 186, 193, 0.2); position: sticky; top: 20px; border-top: 4px solid #c96b85; }
+    .carrito-box h2 { color: #c96b85; margin-top: 0; font-size: 1.3rem; border-bottom: 2px solid #fff0f3; padding-bottom: 8px; }
+    .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fff0f3; padding: 8px 0; font-size: 0.9rem; }
+    .btn-remove { background: #e63946; color: white; border: none; border-radius: 3px; padding: 2px 6px; cursor: pointer; font-size: 0.8rem; }
+    .total-box { font-weight: bold; font-size: 1.1rem; text-align: right; margin-top: 15px; color: #28a745; }
+
+    /* Formularios */
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85rem; color: #72515e; }
+    .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #f2bac1; border-radius: 6px; background-color: #fff; }
+
+    .btn-main { background: #f2bac1; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
+    .btn-main:hover { background: #c96b85; }
+    .btn-add { background: #c96b85; color: white; border: none; }
+    .btn-add:hover { background: #ab516a; }
+    .btn-logout { background: #8d99ae; color: white; border: none; }
+
+    /* Panel Secreto */
+    .admin-trigger { text-align: center; margin-top: 50px; font-size: 0.8rem; }
+    .admin-trigger button { background: none; border: none; color: #b5838d; cursor: pointer; text-decoration: underline; }
+
+    .panel-admin { background: white; padding: 25px; border-radius: 12px; margin-top: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); display: none; border: 1px solid #f2bac1; }
+    .grid-forms { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+    @media (max-width: 768px) { .grid-forms { grid-template-columns: 1fr; } }
+    .divider { text-align: center; margin: 8px 0; color: #b5838d; font-size: 0.8rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Encabezado Basado en tu Dibujo -->
+    <header>
+      <div class="banner-top">
+        <span class="icon-left">🌸🌷</span>
+        <h1 class="brand-title">D & B</h1>
+        <span class="icon-right">💖✨</span>
+      </div>
+      <hr class="banner-divider">
+      <p>Maquillajes, Perfumes, Crema Hidratante y Accesorios</p>
+    </header>
+
+    <!-- Filtro de Categorías -->
+    <div class="categorias-bar" id="categorias-bar"></div>
+
+    <div class="main-layout">
+      <!-- Catálogo de Productos -->
+      <div>
+        <div class="grid" id="productos-grid"></div>
+      </div>
+
+      <!-- Carrito de Compras -->
+      <div>
+        <div class="carrito-box">
+          <h2>Mi Pedido</h2>
+          <div id="carrito-items"><p style="color: #888; font-size: 0.9rem;">El carrito está vacío.</p></div>
+          <div class="total-box">Total: <span id="carrito-total">0 Gs.</span></div>
+
+          <hr style="margin: 15px 0; border: 0; border-top: 1px solid #fff0f3;">
+
+          <h3>Datos de Entrega</h3>
+          <div class="form-group">
+            <label>Nombre y Apellido:</label>
+            <input type="text" id="cliente-nombre" placeholder="Ej. María García">
+          </div>
+          <div class="form-group">
+            <label>Teléfono / WhatsApp:</label>
+            <input type="tel" id="cliente-telefono" placeholder="Ej. 0981123456">
+          </div>
+          <button class="btn-main btn-add" onclick="confirmarPedido()">Confirmar Pedido por WhatsApp</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acceso Exclusivo del Administrador -->
+    <div class="admin-trigger">
+      <button onclick="mostrarLoginAdmin()">Acceso Dueña / Administradora</button>
+    </div>
+
+    <div class="panel-admin" id="panel-admin-box">
+      <h2 style="color: #c96b85;">Panel Exclusivo de Administración</h2>
+
+      <div id="seccion-login">
+        <p>Ingresa tu contraseña secreta para modificar el catálogo:</p>
+        <div class="form-group" style="max-width: 300px;">
+          <label>Contraseña Secreta:</label>
+          <input type="password" id="login-pass" placeholder="Escribe tu clave aquí">
+        </div>
+        <button class="btn-main" style="width: auto;" onclick="login()">Ingresar al Panel</button>
+      </div>
+
+      <div id="seccion-admin" style="display: none;">
+        <p style="color: green; font-weight: bold;">Acceso Autorizado: Modo Administradora Activo.</p>
+        <button class="btn-main btn-logout" style="width: auto;" onclick="logout()">Cerrar Panel</button>
+
+        <div class="grid-forms">
+          <div>
+            <h3>Agregar Nueva Categoría</h3>
+            <div class="form-group">
+              <label>Nombre de la Categoría:</label>
+              <input type="text" id="nueva-cat-nombre" placeholder="Ej. Sérum">
+            </div>
+            <button class="btn-main" onclick="guardarCategoria()">Guardar Categoría</button>
+          </div>
+
+          <div>
+            <h3>Agregar Nuevo Producto</h3>
+            <div class="form-group">
+              <label>Nombre del Producto:</label>
+              <input type="text" id="prod-nombre" placeholder="Ej. Perfume Floral">
+            </div>
+            <div class="form-group">
+              <label>Precio en Guaraníes (Gs.):</label>
+              <input type="number" id="prod-precio" placeholder="Ej. 50000">
+            </div>
+            <div class="form-group">
+              <label>Categoría:</label>
+              <select id="prod-categoria"></select>
+            </div>
+            <div class="form-group">
+              <label>Subir imagen desde la computadora:</label>
+              <input type="file" id="prod-archivo-img" accept="image/*">
+            </div>
+            <div class="divider">O TAMBIÉN</div>
+            <div class="form-group">
+              <label>Enlace URL de imagen:</label>
+              <input type="url" id="prod-url-img" placeholder="https://ejemplo.com/imagen.jpg">
+            </div>
+            <button class="btn-main" onclick="procesarYGuardarProducto()">Guardar Producto</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // CONTRASEÑA SECRETA DEL PANEL DE ADMINISTRACIÓN
+    const CLAVE_SECRETA_ADMIN = "MiClaveSegura123"; 
+
+    const CATEGORIAS_INICIALES = ['Accesorios', 'Perfumes', 'Maquillaje', 'Crema Hidratante'];
+    const IMAGEN_DEFAULT = 'https://via.placeholder.com/300x200?text=Sin+Imagen';
+    
+    let tokenAutenticacion = sessionStorage.getItem('admin_sesion_activa') || null;
+    let carrito = [];
+
+    // Función para formatear números a Guaraníes (ej. 50.000 Gs.)
+    function formatearGs(monto) {
+      return new Intl.NumberFormat('es-PY').format(monto) + ' Gs.';
+    }
+
+    function inicializarBD() {
+      if (!localStorage.getItem('bd_categorias')) {
+        localStorage.setItem('bd_categorias', JSON.stringify(CATEGORIAS_INICIALES));
+      }
+      if (!localStorage.getItem('bd_productos')) {
+        const productosIniciales = [
+          { id: 1, nombre: "Anillo Dorado", precio: 35000, categoria: "Accesorios", imagen: IMAGEN_DEFAULT },
+          { id: 2, nombre: "Perfume Rosa Eau de Parfum", precio: 150000, categoria: "Perfumes", imagen: IMAGEN_DEFAULT },
+          { id: 3, nombre: "Labial Rojo Mate", precio: 45000, categoria: "Maquillaje", imagen: IMAGEN_DEFAULT },
+          { id: 4, nombre: "Crema Facial 50ml", precio: 80000, categoria: "Crema Hidratante", imagen: IMAGEN_DEFAULT }
+        ];
+        localStorage.setItem('bd_productos', JSON.stringify(productosIniciales));
+      }
+    }
+
+    function renderizarCategorias() {
+      const categorias = JSON.parse(localStorage.getItem('bd_categorias'));
+      const bar = document.getElementById('categorias-bar');
+      const selectAdmin = document.getElementById('prod-categoria');
+
+      bar.innerHTML = `<button class="btn-cat active" onclick="filtrarProductos('Todas', this)">Todas</button>`;
+      selectAdmin.innerHTML = '';
+
+      categorias.forEach(cat => {
+        bar.innerHTML += `<button class="btn-cat" onclick="filtrarProductos('${cat}', this)">${cat}</button>`;
+        selectAdmin.innerHTML += `<option value="${cat}">${cat}</option>`;
+      });
+    }
+
+    function renderizarProductos(categoriaFiltro = 'Todas') {
+      const productos = JSON.parse(localStorage.getItem('bd_productos'));
+      const grid = document.getElementById('productos-grid');
+      grid.innerHTML = '';
+
+      const filtrados = categoriaFiltro === 'Todas' ? productos : productos.filter(p => p.categoria === categoriaFiltro);
+
+      if (filtrados.length === 0) {
+        grid.innerHTML = `<p>No hay productos en esta categoría.</p>`;
+        return;
+      }
+
+      filtrados.forEach(p => {
+        const botonEliminar = tokenAutenticacion 
+          ? `<button class="btn-delete" onclick="eliminarProducto(${p.id})">Eliminar Producto</button>` 
+          : '';
+
+        grid.innerHTML += `
+          <div class="card">
+            <img class="card-img" src="${p.imagen || IMAGEN_DEFAULT}" alt="${p.nombre}" onerror="this.src='${IMAGEN_DEFAULT}'">
+            <div class="card-body">
+              <h3>${p.nombre}</h3>
+              <span class="tag">${p.categoria}</span>
+              <div class="precio">${formatearGs(p.precio)}</div>
+              <button class="btn-main btn-add" onclick="agregarAlCarrito(${p.id})">Agregar al Carrito</button>
+              ${botonEliminar}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filtrarProductos(categoria, elementoBtn) {
+      document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('active'));
+      elementoBtn.classList.add('active');
+      renderizarProductos(categoria);
+    }
+
+    function agregarAlCarrito(productoId) {
+      const productos = JSON.parse(localStorage.getItem('bd_productos'));
+      const prod = productos.find(p => p.id === productoId);
+      if (prod) {
+        carrito.push(prod);
+        actualizarCarritoUI();
+      }
+    }
+
+    function removerDelCarrito(index) {
+      carrito.splice(index, 1);
+      actualizarCarritoUI();
+    }
+
+    function actualizarCarritoUI() {
+      const container = document.getElementById('carrito-items');
+      const totalSpan = document.getElementById('carrito-total');
+      
+      if (carrito.length === 0) {
+        container.innerHTML = `<p style="color: #888; font-size: 0.9rem;">El carrito está vacío.</p>`;
+        totalSpan.innerText = '0 Gs.';
+        return;
+      }
+
+      container.innerHTML = '';
+      let total = 0;
+
+      carrito.forEach((prod, index) => {
+        total += parseFloat(prod.precio);
+        container.innerHTML += `
+          <div class="item-carrito">
+            <div>
+              <strong>${prod.nombre}</strong><br>
+              <small>${formatearGs(prod.precio)}</small>
+            </div>
+            <button class="btn-remove" onclick="removerDelCarrito(${index})">X</button>
+          </div>
+        `;
+      });
+
+      totalSpan.innerText = formatearGs(total);
+    }
+
+    function confirmarPedido() {
+      const nombre = document.getElementById('cliente-nombre').value.trim();
+      const telefono = document.getElementById('cliente-telefono').value.trim();
+
+      if (carrito.length === 0) return alert("Selecciona al menos un producto para comprar.");
+      if (!nombre || !telefono) return alert("Por favor ingresa tu nombre y teléfono.");
+
+      let mensaje = `Hola, mi nombre es *${nombre}* (${telefono}). Me gustaría pedir los siguientes productos de *D&B*:\n\n`;
+      let total = 0;
+
+      carrito.forEach((p, i) => {
+        mensaje += `${i + 1}. ${p.nombre} - ${formatearGs(p.precio)}\n`;
+        total += parseFloat(p.precio);
+      });
+
+      mensaje += `\n*Total a pagar:* ${formatearGs(total)}`;
+
+      const whatsappURL = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+      window.open(whatsappURL, '_blank');
+
+      alert(`¡Gracias ${nombre}! Tu pedido ha sido generado.`);
+      carrito = [];
+      document.getElementById('cliente-nombre').value = '';
+      document.getElementById('cliente-telefono').value = '';
+      actualizarCarritoUI();
+    }
+
+    function mostrarLoginAdmin() {
+      const panel = document.getElementById('panel-admin-box');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function login() {
+      const pass = document.getElementById('login-pass').value;
+
+      if (pass === CLAVE_SECRETA_ADMIN) {
+        tokenAutenticacion = "true";
+        sessionStorage.setItem('admin_sesion_activa', "true");
+        verificarSeguridadPagina();
+        renderizarProductos();
+        alert("Acceso concedido al Panel de Administración.");
+      } else {
+        alert("Contraseña incorrecta. Acceso denegado.");
+      }
+    }
+
+    function logout() {
+      tokenAutenticacion = null;
+      sessionStorage.removeItem('admin_sesion_activa');
+      verificarSeguridadPagina();
+      renderizarProductos();
+    }
+
+    function verificarSeguridadPagina() {
+      if (tokenAutenticacion) {
+        document.getElementById('seccion-login').style.display = 'none';
+        document.getElementById('seccion-admin').style.display = 'block';
+      } else {
+        document.getElementById('seccion-login').style.display = 'block';
+        document.getElementById('seccion-admin').style.display = 'none';
+      }
+    }
+
+    function guardarCategoria() {
+      if (!tokenAutenticacion) return alert("Acceso Denegado.");
+      const input = document.getElementById('nueva-cat-nombre');
+      const nuevaCat = input.value.trim();
+      if (!nuevaCat) return alert("Ingresa un nombre válido.");
+
+      const categorias = JSON.parse(localStorage.getItem('bd_categorias'));
+      if (categorias.includes(nuevaCat)) return alert("La categoría ya existe.");
+
+      categorias.push(nuevaCat);
+      localStorage.setItem('bd_categorias', JSON.stringify(categorias));
+      input.value = '';
+      renderizarCategorias();
+      alert("Categoría guardada.");
+    }
+
+    function procesarYGuardarProducto() {
+      if (!tokenAutenticacion) return alert("Acceso Denegado.");
+      const nombre = document.getElementById('prod-nombre').value.trim();
+      const precio = document.getElementById('prod-precio').value;
+      const categoria = document.getElementById('prod-categoria').value;
+      const archivoInput = document.getElementById('prod-archivo-img');
+      const urlInput = document.getElementById('prod-url-img').value.trim();
+
+      if (!nombre || !precio) return alert("Completa nombre y precio.");
+
+      if (archivoInput.files && archivoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          guardarProductoEnBD(nombre, precio, categoria, e.target.result);
+        };
+        reader.readAsDataURL(archivoInput.files[0]);
+      } else {
+        guardarProductoEnBD(nombre, precio, categoria, urlInput || IMAGEN_DEFAULT);
+      }
+    }
+
+    function guardarProductoEnBD(nombre, precio, categoria, imagen) {
+      const productos = JSON.parse(localStorage.getItem('bd_productos'));
+      productos.push({ id: Date.now(), nombre, precio: parseFloat(precio), categoria, imagen });
+      localStorage.setItem('bd_productos', JSON.stringify(productos));
+
+      document.getElementById('prod-nombre').value = '';
+      document.getElementById('prod-precio').value = '';
+      document.getElementById('prod-archivo-img').value = '';
+      document.getElementById('prod-url-img').value = '';
+
+      renderizarProductos();
+      alert("Producto guardado exitosamente.");
+    }
+
+    function eliminarProducto(id) {
+      if (!tokenAutenticacion) return alert("Acceso Denegado.");
+      if (confirm("¿Estás segura de eliminar este producto del catálogo?")) {
+        let productos = JSON.parse(localStorage.getItem('bd_productos'));
+        productos = productos.filter(p => p.id !== id);
+        localStorage.setItem('bd_productos', JSON.stringify(productos));
+        renderizarProductos();
+      }
+    }
+
+    inicializarBD();
+    renderizarCategorias();
+    renderizarProductos();
+    verificarSeguridadPagina();
+  </script>
+</body>
+</html>
