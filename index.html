@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Evitar que el navegador guarde en caché versiones viejas de la página -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <title>D&B - Maquillaje, Perfumes y Accesorios</title>
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -308,11 +314,31 @@
       return new Intl.NumberFormat('es-PY').format(monto) + ' Gs.';
     }
 
+    /* Inicialización blindada contra errores de almacenamiento */
     function inicializarBD() {
-      if (!localStorage.getItem('bd_categorias')) {
+      try {
+        if (!localStorage.getItem('bd_categorias')) {
+          localStorage.setItem('bd_categorias', JSON.stringify(CATEGORIAS_INICIALES));
+        } else {
+          JSON.parse(localStorage.getItem('bd_categorias'));
+        }
+      } catch (e) {
         localStorage.setItem('bd_categorias', JSON.stringify(CATEGORIAS_INICIALES));
       }
-      if (!localStorage.getItem('bd_productos')) {
+
+      try {
+        if (!localStorage.getItem('bd_productos')) {
+          const productosIniciales = [
+            { id: 1, nombre: "Anillo Dorado", precio: 35000, categoria: "Accesorios", imagen: IMAGEN_DEFAULT },
+            { id: 2, nombre: "Perfume Rosa Eau de Parfum", precio: 150000, categoria: "Perfumes", imagen: IMAGEN_DEFAULT },
+            { id: 3, nombre: "Labial Rojo Mate", precio: 45000, categoria: "Maquillaje", imagen: IMAGEN_DEFAULT },
+            { id: 4, nombre: "Crema Facial 50ml", precio: 80000, categoria: "Crema Hidratante", imagen: IMAGEN_DEFAULT }
+          ];
+          localStorage.setItem('bd_productos', JSON.stringify(productosIniciales));
+        } else {
+          JSON.parse(localStorage.getItem('bd_productos'));
+        }
+      } catch (e) {
         const productosIniciales = [
           { id: 1, nombre: "Anillo Dorado", precio: 35000, categoria: "Accesorios", imagen: IMAGEN_DEFAULT },
           { id: 2, nombre: "Perfume Rosa Eau de Parfum", precio: 150000, categoria: "Perfumes", imagen: IMAGEN_DEFAULT },
@@ -324,53 +350,61 @@
     }
 
     function renderizarCategorias() {
-      const categorias = JSON.parse(localStorage.getItem('bd_categorias'));
-      const bar = document.getElementById('categorias-bar');
-      const selectAdmin = document.getElementById('prod-categoria');
+      try {
+        const categorias = JSON.parse(localStorage.getItem('bd_categorias')) || CATEGORIAS_INICIALES;
+        const bar = document.getElementById('categorias-bar');
+        const selectAdmin = document.getElementById('prod-categoria');
 
-      bar.innerHTML = `<button class="btn-cat active" onclick="filtrarProductos('Todas', this)">Todas</button>`;
-      selectAdmin.innerHTML = '';
+        bar.innerHTML = `<button class="btn-cat active" onclick="filtrarProductos('Todas', this)">Todas</button>`;
+        selectAdmin.innerHTML = '';
 
-      categorias.forEach(cat => {
-        bar.innerHTML += `<button class="btn-cat" onclick="filtrarProductos('${cat}', this)">${cat}</button>`;
-        selectAdmin.innerHTML += `<option value="${cat}">${cat}</option>`;
-      });
+        categorias.forEach(cat => {
+          bar.innerHTML += `<button class="btn-cat" onclick="filtrarProductos('${cat}', this)">${cat}</button>`;
+          selectAdmin.innerHTML += `<option value="${cat}">${cat}</option>`;
+        });
+      } catch (e) {
+        console.error("Error cargando categorías:", e);
+      }
     }
 
     function renderizarProductos(categoriaFiltro = 'Todas') {
-      const productos = JSON.parse(localStorage.getItem('bd_productos'));
-      const grid = document.getElementById('productos-grid');
-      grid.innerHTML = '';
+      try {
+        const productos = JSON.parse(localStorage.getItem('bd_productos')) || [];
+        const grid = document.getElementById('productos-grid');
+        grid.innerHTML = '';
 
-      const filtrados = categoriaFiltro === 'Todas' ? productos : productos.filter(p => p.categoria === categoriaFiltro);
+        const filtrados = categoriaFiltro === 'Todas' ? productos : productos.filter(p => p.categoria === categoriaFiltro);
 
-      if (filtrados.length === 0) {
-        grid.innerHTML = `<p>No hay productos en esta categoría.</p>`;
-        return;
+        if (filtrados.length === 0) {
+          grid.innerHTML = `<p>No hay productos en esta categoría.</p>`;
+          return;
+        }
+
+        filtrados.forEach(p => {
+          const botonEliminar = tokenAutenticacion 
+            ? `<button class="btn-delete" onclick="eliminarProducto(${p.id})">Eliminar Producto</button>` 
+            : '';
+
+          const rutaImagen = p.imagen || IMAGEN_DEFAULT;
+
+          grid.innerHTML += `
+            <div class="card">
+              <div class="card-img-wrapper" onclick="ampliarImagen('${rutaImagen}')">
+                <img class="card-img" src="${rutaImagen}" alt="${p.nombre}" onerror="this.src='${IMAGEN_DEFAULT}'">
+              </div>
+              <div class="card-body">
+                <h3>${p.nombre}</h3>
+                <span class="tag">${p.categoria}</span>
+                <div class="precio">${formatearGs(p.precio)}</div>
+                <button class="btn-main btn-add" onclick="agregarAlCarrito(${p.id})">Agregar al Carrito</button>
+                ${botonEliminar}
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        console.error("Error cargando productos:", e);
       }
-
-      filtrados.forEach(p => {
-        const botonEliminar = tokenAutenticacion 
-          ? `<button class="btn-delete" onclick="eliminarProducto(${p.id})">Eliminar Producto</button>` 
-          : '';
-
-        const rutaImagen = p.imagen || IMAGEN_DEFAULT;
-
-        grid.innerHTML += `
-          <div class="card">
-            <div class="card-img-wrapper" onclick="ampliarImagen('${rutaImagen}')">
-              <img class="card-img" src="${rutaImagen}" alt="${p.nombre}" onerror="this.src='${IMAGEN_DEFAULT}'">
-            </div>
-            <div class="card-body">
-              <h3>${p.nombre}</h3>
-              <span class="tag">${p.categoria}</span>
-              <div class="precio">${formatearGs(p.precio)}</div>
-              <button class="btn-main btn-add" onclick="agregarAlCarrito(${p.id})">Agregar al Carrito</button>
-              ${botonEliminar}
-            </div>
-          </div>
-        `;
-      });
     }
 
     /* Agrandar Imagen Modal */
@@ -386,11 +420,7 @@
     /* Ver / Ocultar Contraseña Admin */
     function toggleMostrarPassword() {
       const inputPass = document.getElementById('login-pass');
-      if (inputPass.type === 'password') {
-        inputPass.type = 'text';
-      } else {
-        inputPass.type = 'password';
-      }
+      inputPass.type = inputPass.type === 'password' ? 'text' : 'password';
     }
 
     function filtrarProductos(categoria, elementoBtn) {
@@ -400,7 +430,7 @@
     }
 
     function agregarAlCarrito(productoId) {
-      const productos = JSON.parse(localStorage.getItem('bd_productos'));
+      const productos = JSON.parse(localStorage.getItem('bd_productos')) || [];
       const prod = productos.find(p => p.id === productoId);
       if (prod) {
         carrito.push(prod);
@@ -511,7 +541,7 @@
       const nuevaCat = input.value.trim();
       if (!nuevaCat) return alert("Ingresa un nombre válido.");
 
-      const categorias = JSON.parse(localStorage.getItem('bd_categorias'));
+      const categorias = JSON.parse(localStorage.getItem('bd_categorias')) || [];
       if (categorias.includes(nuevaCat)) return alert("La categoría ya existe.");
 
       categorias.push(nuevaCat);
@@ -543,7 +573,7 @@
     }
 
     function guardarProductoEnBD(nombre, precio, categoria, imagen) {
-      const productos = JSON.parse(localStorage.getItem('bd_productos'));
+      const productos = JSON.parse(localStorage.getItem('bd_productos')) || [];
       productos.push({ id: Date.now(), nombre, precio: parseFloat(precio), categoria, imagen });
       localStorage.setItem('bd_productos', JSON.stringify(productos));
 
@@ -559,7 +589,7 @@
     function eliminarProducto(id) {
       if (!tokenAutenticacion) return alert("Acceso Denegado.");
       if (confirm("¿Estás segura de eliminar este producto del catálogo?")) {
-        let productos = JSON.parse(localStorage.getItem('bd_productos'));
+        let productos = JSON.parse(localStorage.getItem('bd_productos')) || [];
         productos = productos.filter(p => p.id !== id);
         localStorage.setItem('bd_productos', JSON.stringify(productos));
         renderizarProductos();
