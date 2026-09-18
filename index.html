@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Evitar que el navegador guarde en caché versiones viejas de la página -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -15,7 +14,6 @@
     body { background-color: #faf6f7; margin: 0; padding: 20px; color: #4a4a4a; }
     .container { max-width: 1100px; margin: 0 auto; }
     
-    /* ENCABEZADO BASADO EN EL BOCETO */
     header { 
       background-color: #fce4e8; 
       border: 2px solid #f2bac1;
@@ -60,20 +58,16 @@
 
     header p { color: #8b5a6c; margin: 0; font-weight: 500; font-size: 1.1rem; letter-spacing: 0.5px; }
 
-    /* Layout Principal */
     .main-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
     @media (max-width: 850px) { .main-layout { grid-template-columns: 1fr; } }
 
-    /* Categorías */
     .categorias-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
     .btn-cat { padding: 8px 18px; border: 1px solid #f2bac1; background: white; color: #c96b85; border-radius: 20px; cursor: pointer; transition: 0.2s; font-weight: 600; }
     .btn-cat:hover, .btn-cat.active { background: #f2bac1; color: white; }
 
-    /* Catálogo de Productos */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
     .card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(242, 186, 193, 0.15); overflow: hidden; display: flex; flex-direction: column; border-top: 4px solid #f2bac1; position: relative; }
     
-    /* Contenedor de la Imagen interactiva */
     .card-img-wrapper {
       position: relative;
       cursor: pointer;
@@ -110,19 +104,31 @@
     .card .precio { font-size: 1.1rem; font-weight: bold; color: #28a745; margin: 8px 0; }
     .btn-delete { background: #e63946; color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-size: 0.8rem; }
 
-    /* Carrito */
+    /* Botones de Acción de Tarjeta */
+    .btn-details {
+      background: #fce4e8;
+      color: #c96b85;
+      border: 1px solid #f2bac1;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      transition: 0.2s;
+    }
+    .btn-details:hover { background: #f2bac1; color: white; }
+
     .carrito-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(242, 186, 193, 0.2); position: sticky; top: 20px; border-top: 4px solid #c96b85; }
     .carrito-box h2 { color: #c96b85; margin-top: 0; font-size: 1.3rem; border-bottom: 2px solid #fff0f3; padding-bottom: 8px; }
     .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fff0f3; padding: 8px 0; font-size: 0.9rem; }
     .btn-remove { background: #e63946; color: white; border: none; border-radius: 3px; padding: 2px 6px; cursor: pointer; font-size: 0.8rem; }
     .total-box { font-weight: bold; font-size: 1.1rem; text-align: right; margin-top: 15px; color: #28a745; }
 
-    /* Formularios */
     .form-group { margin-bottom: 12px; }
     .form-group label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85rem; color: #72515e; }
-    .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #f2bac1; border-radius: 6px; background-color: #fff; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #f2bac1; border-radius: 6px; background-color: #fff; }
 
-    /* Contenedor especial para el Input de Contraseña con botón Ojo */
     .pass-container {
       display: flex;
       align-items: center;
@@ -144,7 +150,6 @@
     .btn-add:hover { background: #ab516a; }
     .btn-logout { background: #8d99ae; color: white; border: none; }
 
-    /* Panel Secreto */
     .admin-trigger { text-align: center; margin-top: 50px; font-size: 0.8rem; }
     .admin-trigger button { background: none; border: none; color: #b5838d; cursor: pointer; text-decoration: underline; }
 
@@ -153,7 +158,7 @@
     @media (max-width: 768px) { .grid-forms { grid-template-columns: 1fr; } }
     .divider { text-align: center; margin: 8px 0; color: #b5838d; font-size: 0.8rem; font-weight: bold; }
 
-    /* Modal Visor de Imagen Grande (Lightbox) */
+    /* Modal Visor de Imagen Grande */
     .modal-viewer {
       display: none;
       position: fixed;
@@ -180,12 +185,77 @@
       font-weight: bold;
       cursor: pointer;
     }
+
+    /* MODAL DE DETALLES DEL PRODUCTO */
+    .modal-details {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9998;
+      padding: 15px;
+    }
+
+    .modal-details-card {
+      background: white;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      position: relative;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-details-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      background-color: #fff0f3;
+    }
+
+    .modal-details-content {
+      padding: 20px;
+    }
+
+    .modal-details-content h2 {
+      margin: 0 0 5px 0;
+      color: #5a3e49;
+    }
+
+    .modal-details-content .desc {
+      color: #666;
+      font-size: 0.95rem;
+      margin: 15px 0;
+      line-height: 1.4;
+    }
+
+    .close-details {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: rgba(255,255,255,0.8);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #5a3e49;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Encabezado Basado en tu Dibujo -->
     <header>
       <div class="banner-top">
         <span class="icon-left">🌸🌷</span>
@@ -197,16 +267,15 @@
         Creé este espacio para que explores, descubras y encuentres exactamente lo que necesitas.</p>
     </header>
 
-    <!-- Filtro de Categorías -->
     <div class="categorias-bar" id="categorias-bar"></div>
 
     <div class="main-layout">
-      <!-- Catálogo de Productos -->
       <div>
-        <div class="grid" id="productos-grid"></div>
+        <div class="grid" id="productos-grid">
+          <p style="text-align: center; color: #888;">Cargando catálogo desde la nube...</p>
+        </div>
       </div>
 
-      <!-- Carrito de Compras -->
       <div>
         <div class="carrito-box">
           <h2>Mi Pedido</h2>
@@ -229,7 +298,6 @@
       </div>
     </div>
 
-    <!-- Acceso Exclusivo del Administrador -->
     <div class="admin-trigger">
       <button onclick="mostrarLoginAdmin()">Acceso Dueña / Administradora</button>
     </div>
@@ -278,6 +346,10 @@
               <select id="prod-categoria"></select>
             </div>
             <div class="form-group">
+              <label>Descripción del Producto:</label>
+              <textarea id="prod-descripcion" rows="3" placeholder="Ej. Fragancia duradera con notas de jazmín y lavanda. Ideal para el día a día."></textarea>
+            </div>
+            <div class="form-group">
               <label>Subir imagen desde la computadora:</label>
               <input type="file" id="prod-archivo-img" accept="image/*">
             </div>
@@ -286,7 +358,7 @@
               <label>Enlace URL de imagen:</label>
               <input type="url" id="prod-url-img" placeholder="https://ejemplo.com/imagen.jpg">
             </div>
-            <button class="btn-main" onclick="procesarYGuardarProducto()">Guardar Producto</button>
+            <button class="btn-main" id="btn-guardar-prod" onclick="procesarYGuardarProducto()">Guardar Producto</button>
           </div>
         </div>
       </div>
@@ -299,149 +371,186 @@
     <img id="img-ampliada" src="" alt="Vista ampliada">
   </div>
 
-  <script>
-    // CONTRASEÑA SECRETA DEL PANEL DE ADMINISTRACIÓN
-    const CLAVE_SECRETA_ADMIN = "MiClaveSegura123"; 
+  <!-- Modal de Detalles del Producto -->
+  <div class="modal-details" id="modal-details">
+    <div class="modal-details-card">
+      <button class="close-details" onclick="cerrarModalDetalles()">&times;</button>
+      <img id="detail-img" class="modal-details-img" src="" alt="Producto">
+      <div class="modal-details-content">
+        <span id="detail-tag" class="tag">Categoría</span>
+        <h2 id="detail-nombre">Nombre del Producto</h2>
+        <div id="detail-precio" class="precio">0 Gs.</div>
+        <p id="detail-descripcion" class="desc">Sin descripción disponible.</p>
+        <button id="detail-btn-add" class="btn-main btn-add">Agregar al Carrito</button>
+      </div>
+    </div>
+  </div>
 
-    const CATEGORIAS_INICIALES = ['Accesorios', 'Perfumes', 'Maquillaje', 'Crema Hidratante'];
+  <!-- CONEXIÓN DIRECTA CON TU BASE DE DATOS FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      deleteDoc, 
+      doc, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    // Credenciales de tu proyecto Tienda-DB
+    const firebaseConfig = {
+      apiKey: "AIzaSyD1O4scV910DUbYbEno8e4o6QKZDL93iv8",
+      authDomain: "tienda-db-2eb64.firebaseapp.com",
+      projectId: "tienda-db-2eb64",
+      storageBucket: "tienda-db-2eb64.firebasestorage.app",
+      messagingSenderId: "174764365310",
+      appId: "1:174764365310:web:a47e5cb219f5ea40ffdcaf"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const CLAVE_SECRETA_ADMIN = "MiClaveSegura123";
     const IMAGEN_DEFAULT = 'https://via.placeholder.com/300x200?text=Sin+Imagen';
     
     let tokenAutenticacion = sessionStorage.getItem('admin_sesion_activa') || null;
     let carrito = [];
+    let productosGlobales = [];
+    let categoriasGlobales = [];
+    let filtroCategoriaActual = 'Todas';
 
-    // Función para formatear números a Guaraníes (ej. 50.000 Gs.)
     function formatearGs(monto) {
       return new Intl.NumberFormat('es-PY').format(monto) + ' Gs.';
     }
 
-    /* Inicialización blindada contra errores de almacenamiento */
-    function inicializarBD() {
-      try {
-        if (!localStorage.getItem('bd_categorias')) {
-          localStorage.setItem('bd_categorias', JSON.stringify(CATEGORIAS_INICIALES));
-        } else {
-          JSON.parse(localStorage.getItem('bd_categorias'));
-        }
-      } catch (e) {
-        localStorage.setItem('bd_categorias', JSON.stringify(CATEGORIAS_INICIALES));
+    onSnapshot(collection(db, "categorias"), (snapshot) => {
+      categoriasGlobales = [];
+      snapshot.forEach((doc) => {
+        categoriasGlobales.push(doc.data().nombre);
+      });
+      if (categoriasGlobales.length === 0) {
+        categoriasGlobales = ['Accesorios', 'Perfumes', 'Maquillaje', 'Crema Hidratante'];
+      }
+      renderizarCategorias();
+    });
+
+    onSnapshot(collection(db, "productos"), (snapshot) => {
+      productosGlobales = [];
+      snapshot.forEach((doc) => {
+        productosGlobales.push({ id: doc.id, ...doc.data() });
+      });
+      renderizarProductos(filtroCategoriaActual);
+    });
+
+    window.renderizarCategorias = function() {
+      const bar = document.getElementById('categorias-bar');
+      const selectAdmin = document.getElementById('prod-categoria');
+
+      bar.innerHTML = `<button class="btn-cat ${filtroCategoriaActual === 'Todas' ? 'active' : ''}" onclick="filtrarProductos('Todas', this)">Todas</button>`;
+      selectAdmin.innerHTML = '';
+
+      categoriasGlobales.forEach(cat => {
+        const isActive = filtroCategoriaActual === cat ? 'active' : '';
+        bar.innerHTML += `<button class="btn-cat ${isActive}" onclick="filtrarProductos('${cat}', this)">${cat}</button>`;
+        selectAdmin.innerHTML += `<option value="${cat}">${cat}</option>`;
+      });
+    };
+
+    window.renderizarProductos = function(categoriaFiltro = 'Todas') {
+      const grid = document.getElementById('productos-grid');
+      grid.innerHTML = '';
+
+      const filtrados = categoriaFiltro === 'Todas' 
+        ? productosGlobales 
+        : productosGlobales.filter(p => p.categoria === categoriaFiltro);
+
+      if (filtrados.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">No hay productos en esta categoría.</p>`;
+        return;
       }
 
-      try {
-        if (!localStorage.getItem('bd_productos')) {
-          const productosIniciales = [
-            { id: 1, nombre: "Anillo Dorado", precio: 35000, categoria: "Accesorios", imagen: IMAGEN_DEFAULT },
-            { id: 2, nombre: "Perfume Rosa Eau de Parfum", precio: 150000, categoria: "Perfumes", imagen: IMAGEN_DEFAULT },
-            { id: 3, nombre: "Labial Rojo Mate", precio: 45000, categoria: "Maquillaje", imagen: IMAGEN_DEFAULT },
-            { id: 4, nombre: "Crema Facial 50ml", precio: 80000, categoria: "Crema Hidratante", imagen: IMAGEN_DEFAULT }
-          ];
-          localStorage.setItem('bd_productos', JSON.stringify(productosIniciales));
-        } else {
-          JSON.parse(localStorage.getItem('bd_productos'));
-        }
-      } catch (e) {
-        const productosIniciales = [
-          { id: 1, nombre: "Anillo Dorado", precio: 35000, categoria: "Accesorios", imagen: IMAGEN_DEFAULT },
-          { id: 2, nombre: "Perfume Rosa Eau de Parfum", precio: 150000, categoria: "Perfumes", imagen: IMAGEN_DEFAULT },
-          { id: 3, nombre: "Labial Rojo Mate", precio: 45000, categoria: "Maquillaje", imagen: IMAGEN_DEFAULT },
-          { id: 4, nombre: "Crema Facial 50ml", precio: 80000, categoria: "Crema Hidratante", imagen: IMAGEN_DEFAULT }
-        ];
-        localStorage.setItem('bd_productos', JSON.stringify(productosIniciales));
-      }
-    }
+      filtrados.forEach(p => {
+        const botonEliminar = tokenAutenticacion 
+          ? `<button class="btn-delete" onclick="eliminarProducto('${p.id}')">Eliminar Producto</button>` 
+          : '';
 
-    function renderizarCategorias() {
-      try {
-        const categorias = JSON.parse(localStorage.getItem('bd_categorias')) || CATEGORIAS_INICIALES;
-        const bar = document.getElementById('categorias-bar');
-        const selectAdmin = document.getElementById('prod-categoria');
+        const rutaImagen = p.imagen || IMAGEN_DEFAULT;
 
-        bar.innerHTML = `<button class="btn-cat active" onclick="filtrarProductos('Todas', this)">Todas</button>`;
-        selectAdmin.innerHTML = '';
-
-        categorias.forEach(cat => {
-          bar.innerHTML += `<button class="btn-cat" onclick="filtrarProductos('${cat}', this)">${cat}</button>`;
-          selectAdmin.innerHTML += `<option value="${cat}">${cat}</option>`;
-        });
-      } catch (e) {
-        console.error("Error cargando categorías:", e);
-      }
-    }
-
-    function renderizarProductos(categoriaFiltro = 'Todas') {
-      try {
-        const productos = JSON.parse(localStorage.getItem('bd_productos')) || [];
-        const grid = document.getElementById('productos-grid');
-        grid.innerHTML = '';
-
-        const filtrados = categoriaFiltro === 'Todas' ? productos : productos.filter(p => p.categoria === categoriaFiltro);
-
-        if (filtrados.length === 0) {
-          grid.innerHTML = `<p>No hay productos en esta categoría.</p>`;
-          return;
-        }
-
-        filtrados.forEach(p => {
-          const botonEliminar = tokenAutenticacion 
-            ? `<button class="btn-delete" onclick="eliminarProducto(${p.id})">Eliminar Producto</button>` 
-            : '';
-
-          const rutaImagen = p.imagen || IMAGEN_DEFAULT;
-
-          grid.innerHTML += `
-            <div class="card">
-              <div class="card-img-wrapper" onclick="ampliarImagen('${rutaImagen}')">
-                <img class="card-img" src="${rutaImagen}" alt="${p.nombre}" onerror="this.src='${IMAGEN_DEFAULT}'">
-              </div>
-              <div class="card-body">
-                <h3>${p.nombre}</h3>
-                <span class="tag">${p.categoria}</span>
-                <div class="precio">${formatearGs(p.precio)}</div>
-                <button class="btn-main btn-add" onclick="agregarAlCarrito(${p.id})">Agregar al Carrito</button>
-                ${botonEliminar}
-              </div>
+        grid.innerHTML += `
+          <div class="card">
+            <div class="card-img-wrapper" onclick="ampliarImagen('${rutaImagen}')">
+              <img class="card-img" src="${rutaImagen}" alt="${p.nombre}" onerror="this.src='${IMAGEN_DEFAULT}'">
             </div>
-          `;
-        });
-      } catch (e) {
-        console.error("Error cargando productos:", e);
-      }
-    }
+            <div class="card-body">
+              <h3>${p.nombre}</h3>
+              <span class="tag">${p.categoria}</span>
+              <div class="precio">${formatearGs(p.precio)}</div>
+              <button class="btn-details" onclick="abrirModalDetalles('${p.id}')">📄 Ver Detalles</button>
+              <button class="btn-main btn-add" onclick="agregarAlCarrito('${p.id}')">Agregar al Carrito</button>
+              ${botonEliminar}
+            </div>
+          </div>
+        `;
+      });
+    };
 
-    /* Agrandar Imagen Modal */
-    function ampliarImagen(url) {
+    window.abrirModalDetalles = function(productoId) {
+      const prod = productosGlobales.find(p => p.id === productoId);
+      if (!prod) return;
+
+      document.getElementById('detail-img').src = prod.imagen || IMAGEN_DEFAULT;
+      document.getElementById('detail-tag').innerText = prod.categoria;
+      document.getElementById('detail-nombre').innerText = prod.nombre;
+      document.getElementById('detail-precio').innerText = formatearGs(prod.precio);
+      document.getElementById('detail-descripcion').innerText = prod.descripcion || "Sin descripción detallada disponible.";
+      
+      const btnAdd = document.getElementById('detail-btn-add');
+      btnAdd.onclick = function() {
+        agregarAlCarrito(prod.id);
+        cerrarModalDetalles();
+      };
+
+      document.getElementById('modal-details').style.display = 'flex';
+    };
+
+    window.cerrarModalDetalles = function() {
+      document.getElementById('modal-details').style.display = 'none';
+    };
+
+    window.ampliarImagen = function(url) {
       document.getElementById('img-ampliada').src = url;
       document.getElementById('modal-viewer').style.display = 'flex';
-    }
+    };
 
-    function cerrarModalImagen() {
+    window.cerrarModalImagen = function() {
       document.getElementById('modal-viewer').style.display = 'none';
-    }
+    };
 
-    /* Ver / Ocultar Contraseña Admin */
-    function toggleMostrarPassword() {
+    window.toggleMostrarPassword = function() {
       const inputPass = document.getElementById('login-pass');
       inputPass.type = inputPass.type === 'password' ? 'text' : 'password';
-    }
+    };
 
-    function filtrarProductos(categoria, elementoBtn) {
+    window.filtrarProductos = function(categoria, elementoBtn) {
+      filtroCategoriaActual = categoria;
       document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('active'));
-      elementoBtn.classList.add('active');
+      if(elementoBtn) elementoBtn.classList.add('active');
       renderizarProductos(categoria);
-    }
+    };
 
-    function agregarAlCarrito(productoId) {
-      const productos = JSON.parse(localStorage.getItem('bd_productos')) || [];
-      const prod = productos.find(p => p.id === productoId);
+    window.agregarAlCarrito = function(productoId) {
+      const prod = productosGlobales.find(p => p.id === productoId);
       if (prod) {
         carrito.push(prod);
         actualizarCarritoUI();
       }
-    }
+    };
 
-    function removerDelCarrito(index) {
+    window.removerDelCarrito = function(index) {
       carrito.splice(index, 1);
       actualizarCarritoUI();
-    }
+    };
 
     function actualizarCarritoUI() {
       const container = document.getElementById('carrito-items');
@@ -472,7 +581,7 @@
       totalSpan.innerText = formatearGs(total);
     }
 
-    function confirmarPedido() {
+    window.confirmarPedido = function() {
       const nombre = document.getElementById('cliente-nombre').value.trim();
       const telefono = document.getElementById('cliente-telefono').value.trim();
 
@@ -497,33 +606,33 @@
       document.getElementById('cliente-nombre').value = '';
       document.getElementById('cliente-telefono').value = '';
       actualizarCarritoUI();
-    }
+    };
 
-    function mostrarLoginAdmin() {
+    window.mostrarLoginAdmin = function() {
       const panel = document.getElementById('panel-admin-box');
       panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-    }
+    };
 
-    function login() {
+    window.login = function() {
       const pass = document.getElementById('login-pass').value;
 
       if (pass === CLAVE_SECRETA_ADMIN) {
         tokenAutenticacion = "true";
         sessionStorage.setItem('admin_sesion_activa', "true");
         verificarSeguridadPagina();
-        renderizarProductos();
+        renderizarProductos(filtroCategoriaActual);
         alert("Acceso concedido al Panel de Administración.");
       } else {
         alert("Contraseña incorrecta. Acceso denegado.");
       }
-    }
+    };
 
-    function logout() {
+    window.logout = function() {
       tokenAutenticacion = null;
       sessionStorage.removeItem('admin_sesion_activa');
       verificarSeguridadPagina();
-      renderizarProductos();
-    }
+      renderizarProductos(filtroCategoriaActual);
+    };
 
     function verificarSeguridadPagina() {
       if (tokenAutenticacion) {
@@ -535,27 +644,29 @@
       }
     }
 
-    function guardarCategoria() {
+    window.guardarCategoria = async function() {
       if (!tokenAutenticacion) return alert("Acceso Denegado.");
       const input = document.getElementById('nueva-cat-nombre');
       const nuevaCat = input.value.trim();
       if (!nuevaCat) return alert("Ingresa un nombre válido.");
 
-      const categorias = JSON.parse(localStorage.getItem('bd_categorias')) || [];
-      if (categorias.includes(nuevaCat)) return alert("La categoría ya existe.");
+      if (categoriasGlobales.includes(nuevaCat)) return alert("La categoría ya existe.");
 
-      categorias.push(nuevaCat);
-      localStorage.setItem('bd_categorias', JSON.stringify(categorias));
-      input.value = '';
-      renderizarCategorias();
-      alert("Categoría guardada.");
-    }
+      try {
+        await addDoc(collection(db, "categorias"), { nombre: nuevaCat });
+        input.value = '';
+        alert("Categoría guardada exitosamente en la nube.");
+      } catch (e) {
+        alert("Error al guardar categoría: " + e.message);
+      }
+    };
 
-    function procesarYGuardarProducto() {
+    window.procesarYGuardarProducto = function() {
       if (!tokenAutenticacion) return alert("Acceso Denegado.");
       const nombre = document.getElementById('prod-nombre').value.trim();
       const precio = document.getElementById('prod-precio').value;
       const categoria = document.getElementById('prod-categoria').value;
+      const descripcion = document.getElementById('prod-descripcion').value.trim();
       const archivoInput = document.getElementById('prod-archivo-img');
       const urlInput = document.getElementById('prod-url-img').value.trim();
 
@@ -564,41 +675,56 @@
       if (archivoInput.files && archivoInput.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          guardarProductoEnBD(nombre, precio, categoria, e.target.result);
+          guardarProductoEnBD(nombre, precio, categoria, descripcion, e.target.result);
         };
         reader.readAsDataURL(archivoInput.files[0]);
       } else {
-        guardarProductoEnBD(nombre, precio, categoria, urlInput || IMAGEN_DEFAULT);
+        guardarProductoEnBD(nombre, precio, categoria, descripcion, urlInput || IMAGEN_DEFAULT);
+      }
+    };
+
+    async function guardarProductoEnBD(nombre, precio, categoria, descripcion, imagen) {
+      const btn = document.getElementById('btn-guardar-prod');
+      btn.disabled = true;
+      btn.innerText = "Guardando...";
+
+      try {
+        await addDoc(collection(db, "productos"), {
+          nombre,
+          precio: parseFloat(precio),
+          categoria,
+          descripcion,
+          imagen
+        });
+
+        document.getElementById('prod-nombre').value = '';
+        document.getElementById('prod-precio').value = '';
+        document.getElementById('prod-categoria').value = '';
+        document.getElementById('prod-descripcion').value = '';
+        document.getElementById('prod-archivo-img').value = '';
+        document.getElementById('prod-url-img').value = '';
+
+        alert("Producto guardado exitosamente en la nube.");
+      } catch (e) {
+        alert("Error al guardar producto: " + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Guardar Producto";
       }
     }
 
-    function guardarProductoEnBD(nombre, precio, categoria, imagen) {
-      const productos = JSON.parse(localStorage.getItem('bd_productos')) || [];
-      productos.push({ id: Date.now(), nombre, precio: parseFloat(precio), categoria, imagen });
-      localStorage.setItem('bd_productos', JSON.stringify(productos));
-
-      document.getElementById('prod-nombre').value = '';
-      document.getElementById('prod-precio').value = '';
-      document.getElementById('prod-archivo-img').value = '';
-      document.getElementById('prod-url-img').value = '';
-
-      renderizarProductos();
-      alert("Producto guardado exitosamente.");
-    }
-
-    function eliminarProducto(id) {
+    window.eliminarProducto = async function(id) {
       if (!tokenAutenticacion) return alert("Acceso Denegado.");
       if (confirm("¿Estás segura de eliminar este producto del catálogo?")) {
-        let productos = JSON.parse(localStorage.getItem('bd_productos')) || [];
-        productos = productos.filter(p => p.id !== id);
-        localStorage.setItem('bd_productos', JSON.stringify(productos));
-        renderizarProductos();
+        try {
+          await deleteDoc(doc(db, "productos", id));
+          alert("Producto eliminado de la nube.");
+        } catch (e) {
+          alert("Error al eliminar: " + e.message);
+        }
       }
-    }
+    };
 
-    inicializarBD();
-    renderizarCategorias();
-    renderizarProductos();
     verificarSeguridadPagina();
   </script>
 </body>
